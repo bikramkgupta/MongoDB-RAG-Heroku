@@ -1,0 +1,55 @@
+name: mongodb-rag-heroku
+region: syd1
+services:
+  - name: web
+    github:
+      repo: bikramkgupta/mongodb-rag-heroku
+      branch: app_platform
+      deploy_on_push: true
+    dockerfile_path: Dockerfile
+    http_port: 8080
+    instance_count: 1
+    instance_size_slug: apps-s-1vcpu-1gb
+    envs:
+      # Database
+      - key: MONGODB_URI
+        scope: RUN_TIME
+        type: SECRET
+        value: ${MONGODB_URI}
+
+      # AI/ML APIs
+      - key: OPENAI_API_KEY
+        scope: RUN_TIME
+        type: SECRET
+        value: ${OPENAI_API_KEY}
+
+      - key: GRADIENT_API_KEY
+        scope: RUN_TIME
+        type: SECRET
+        value: ${GRADIENT_API_KEY}
+
+      - key: MODEL_ACCESS_KEY
+        scope: RUN_TIME
+        type: SECRET
+        value: ${MODEL_ACCESS_KEY}
+
+      - key: INFERENCE_ENDPOINT
+        scope: RUN_TIME
+        type: GENERAL
+        value: "https://inference.do-ai.run"
+
+      # App configuration
+      - key: NODE_ENV
+        scope: RUN_TIME
+        type: GENERAL
+        value: "production"
+
+      - key: PORT
+        scope: RUN_TIME
+        type: GENERAL
+        value: "8080"
+
+      - key: HOSTNAME
+        scope: RUN_TIME
+        type: GENERAL
+        value: "0.0.0.0"

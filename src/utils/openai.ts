@@ -1,5 +1,5 @@
 import { OpenAIEmbeddings } from '@langchain/openai';
-import { MongoDBAtlasVectorSearch, MongoDBAtlasVectorSearchLibArgs } from '@langchain/community/vectorstores/mongodb_atlas';
+import { MongoDBAtlasVectorSearch } from '@langchain/community/vectorstores/mongodb_atlas';
 import { MongoClient } from "mongodb";
 import dotenv from 'dotenv';
 dotenv.config();
@@ -47,8 +47,8 @@ export function vectorStore(): MongoDBAtlasVectorSearch {
     return vectorStore
 }
 
-export function searchArgs(): MongoDBAtlasVectorSearchLibArgs {
-    const searchArgs: MongoDBAtlasVectorSearchLibArgs = {
+export function searchArgs(): object {
+    const searchArgs: object = {
         collection,
         indexName: "vector_index",
         textKey: "text",
