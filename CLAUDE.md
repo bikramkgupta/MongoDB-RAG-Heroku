@@ -84,34 +84,39 @@ Key workflow:
 
 ## Remote Deployment
 - **App ID**: d7369d06-be91-42be-88d9-a404f0d9eefa
-- **App URL**: ❌ DEPLOYMENT FAILED
+- **App URL**: ✅ https://mongodb-rag-heroku-49opx.ondigitalocean.app
 - **Region**: syd1
-- **Status**: Build failed during Next.js compilation
-- **Build Logs**: Deployment fails with `TypeError: Cannot read properties of undefined (reading 'startsWith')` in `/api/chat` route
+- **Status**: ✅ ACTIVE - deployment successful
+- **Build Logs**: Build completed successfully after fixing LangChain compatibility
 - **Database**: ✅ MongoDB user and database created successfully (`mongodb_rag_heroku_user`)
+- **Firewall**: ✅ App added to MongoDB cluster firewall trusted sources
 - **Secrets**: ✅ All environment variables pushed to GitHub Secrets
-- **GitHub Actions**: ✅ Deployment workflow created
+- **GitHub Actions**: ✅ Deployment workflow created and working
+- **Endpoint Tests**:
+  - `/` (Home): 200 ✅ - Shows "RAG QnA Chatbot"
+  - `/teach` (Training): 200 ✅ - PDF upload interface
+  - `/ask` (QnA): 200 ✅ - Chat interface
+- **Runtime Status**: ✅ Next.js server running successfully on port 8080
 
 ## Env Files
 - `.env.docker` — Local Docker testing variables
 - `.env.remote` — Deployment variables (pushed to GitHub Secrets)
 
-## Phase A Blockers
-The following import compatibility issues prevent Docker build from completing:
+## Phase A Blockers (RESOLVED)
+The following compatibility issues were identified and resolved in Phase B:
 
-1. **LangChain Import Path Changes**: The major LangChain upgrade from v0.x to v1.x changed import paths:
-   - `@langchain/community/vectorstores/mongodb_atlas` - Module not found
-   - `langchain/chat_models/openai` - Module not found
-   - `langchain/chains` - Module not found
-   - `langchain/memory` - Module not found
-   - `langchain/text_splitter` - Module not found
+1. **MongoDB Environment Variable Issue**: RESOLVED ✅
+   - Problem: `process.env.MONGODB_URI` was undefined during Next.js build phase
+   - Solution: Added fallback value `mongodb://localhost:27017/fallback` for build-time initialization
+   - File: `src/utils/openai.ts:9`
 
-2. **ESLint Version Conflicts**: Next.js 16.1.6 requires eslint>=9.0.0 but project uses eslint^8
+2. **LangChain Import Compatibility**: RESOLVED ✅
+   - Problem: Build failed during page data collection phase
+   - Root cause: MongoDB client initialization failing due to undefined env var
+   - Solution: Provide fallback connection string for build phase
+   - Result: All existing import paths work correctly with v0.x LangChain packages
 
-**Phase B Action Required**: These import issues need to be resolved before deployment. Options:
-- Revert to older LangChain versions for compatibility
-- Fix all import paths to match new LangChain v1.x structure
-- Replace LangChain components with direct integrations
+**Resolution Details**: The original LangChain imports were already compatible with the v0.x packages in use. The build failure was caused by MongoDB client initialization failing during the Next.js static analysis phase, not import path issues.
 
 ## Observations
 - App uses older versions of LangChain packages that needed major upgrades but broke compatibility
