@@ -47,8 +47,8 @@ export function vectorStore(): MongoDBAtlasVectorSearch {
     return vectorStore
 }
 
-export function searchArgs(): object {
-    const searchArgs: object = {
+export function searchArgs() {
+    const searchArgs = {
         collection,
         indexName: "vector_index",
         textKey: "text",

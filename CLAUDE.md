@@ -118,3 +118,35 @@ The following import compatibility issues prevent Docker build from completing:
 - Uses MongoDB Atlas Vector Search with specific index name "vector_index"
 - Dockerfile and environment files created successfully
 - App Platform spec (.do/app.yaml) ready for deployment
+## Shared Infrastructure
+
+Region: syd1
+
+### PostgreSQL Cluster
+- Cluster ID: b32bfe92-51c0-4660-9879-92a7db886482
+- Host: heroku-migration-pg-do-user-8198484-0.m.db.ondigitalocean.com
+- Port: 25060
+- Admin User: doadmin
+- Admin Password: [REDACTED]
+- Create app DB: `doctl databases db create b32bfe92-51c0-4660-9879-92a7db886482 <appname>_db`
+- Create app user: `doctl databases user create b32bfe92-51c0-4660-9879-92a7db886482 <appname>_user`
+- Connection string pattern: `postgresql://<user>:<password>@heroku-migration-pg-do-user-8198484-0.m.db.ondigitalocean.com:25060/<db>?sslmode=require`
+
+### MongoDB Cluster
+- Cluster ID: 0cd276e1-6800-40f7-b938-72db4e389863
+- Host: heroku-migration-mongo-29f7181e.mongo.ondigitalocean.com
+- Port: 27017
+- Admin User: doadmin
+- Admin Password: [REDACTED]
+- Create app user: `doctl databases user create 0cd276e1-6800-40f7-b938-72db4e389863 <appname>_user`
+- Database created on first write (use app-specific name)
+- Connection string pattern: `mongodb+srv://<user>:<password>@heroku-migration-mongo-29f7181e.mongo.ondigitalocean.com/<dbname>?tls=true&authSource=admin`
+
+### Valkey Cluster
+- Cluster ID: ab76d53c-8e07-44ff-b97b-b62815ec66b8
+- Host: heroku-migration-valkey-do-user-8198484-0.m.db.ondigitalocean.com
+- Port: 25061
+- Password: [REDACTED]
+- Single default user — use key prefix `<appname>:` for data isolation
+- Connection string: `rediss://default:[REDACTED]@heroku-migration-valkey-do-user-8198484-0.m.db.ondigitalocean.com:25061`
+
