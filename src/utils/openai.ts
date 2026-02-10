@@ -6,7 +6,7 @@ dotenv.config();
 
 let embeddingsInstance: OpenAIEmbeddings | null = null;
 
-const client = new MongoClient(process.env.MONGODB_URI!);
+const client = new MongoClient(process.env.MONGODB_URI || "mongodb://localhost:27017/fallback");
 const namespace = "chatter.training_data";
 const [dbName, collectionName] = namespace.split(".");
 // const dbName = process.env.DB_NAME!;

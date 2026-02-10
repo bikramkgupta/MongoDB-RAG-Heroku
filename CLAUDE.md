@@ -83,9 +83,14 @@ Key workflow:
 - **Test results**: BUILD FAILED - package import issues need resolution
 
 ## Remote Deployment
-- **App ID**: (Phase B fills this)
-- **App URL**: (Phase B fills this)
+- **App ID**: d7369d06-be91-42be-88d9-a404f0d9eefa
+- **App URL**: ❌ DEPLOYMENT FAILED
 - **Region**: syd1
+- **Status**: Build failed during Next.js compilation
+- **Build Logs**: Deployment fails with `TypeError: Cannot read properties of undefined (reading 'startsWith')` in `/api/chat` route
+- **Database**: ✅ MongoDB user and database created successfully (`mongodb_rag_heroku_user`)
+- **Secrets**: ✅ All environment variables pushed to GitHub Secrets
+- **GitHub Actions**: ✅ Deployment workflow created
 
 ## Env Files
 - `.env.docker` — Local Docker testing variables
